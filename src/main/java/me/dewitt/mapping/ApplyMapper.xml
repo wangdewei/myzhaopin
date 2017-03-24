@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="me.dewitt.dao.ApplyMapper" >
+  <resultMap id="BaseResultMap" type="me.dewitt.pojo.ApplyKey" >
+    <id column="apply_id" property="applyId" jdbcType="INTEGER" />
+    <id column="resume_id" property="resumeId" jdbcType="INTEGER" />
+    <id column="job_id" property="jobId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    apply_id, resume_id, job_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="me.dewitt.pojo.ApplyExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_apply
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="me.dewitt.pojo.ApplyKey" >
+    delete from t_apply
+    where apply_id = #{applyId,jdbcType=INTEGER}
+      and resume_id = #{resumeId,jdbcType=INTEGER}
+      and job_id = #{jobId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="me.dewitt.pojo.ApplyExample" >
+    delete from t_apply
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="me.dewitt.pojo.ApplyKey" >
+    insert into t_apply (apply_id, resume_id, job_id
+      )
+    values (#{applyId,jdbcType=INTEGER}, #{resumeId,jdbcType=INTEGER}, #{jobId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="me.dewitt.pojo.ApplyKey" >
+    insert into t_apply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="applyId != null" >
+        apply_id,
+      </if>
+      <if test="resumeId != null" >
+        resume_id,
+      </if>
+      <if test="jobId != null" >
+        job_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="applyId != null" >
+        #{applyId,jdbcType=INTEGER},
+      </if>
+      <if test="resumeId != null" >
+        #{resumeId,jdbcType=INTEGER},
+      </if>
+      <if test="jobId != null" >
+        #{jobId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="me.dewitt.pojo.ApplyExample" resultType="java.lang.Integer" >
+    select count(*) from t_apply
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_apply
+    <set >
+      <if test="record.applyId != null" >
+        apply_id = #{record.applyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.resumeId != null" >
+        resume_id = #{record.resumeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.jobId != null" >
+        job_id = #{record.jobId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_apply
+    set apply_id = #{record.applyId,jdbcType=INTEGER},
+      resume_id = #{record.resumeId,jdbcType=INTEGER},
+      job_id = #{record.jobId,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

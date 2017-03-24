@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="me.dewitt.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="me.dewitt.pojo.User" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="passwd" property="passwd" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="phone_num" property="phoneNum" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    user_id, user_name, passwd, sex, phone_num, email, birthday
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="me.dewitt.pojo.UserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="me.dewitt.pojo.UserExample" >
+    delete from t_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="me.dewitt.pojo.User" >
+    insert into t_user (user_id, user_name, passwd, 
+      sex, phone_num, email, 
+      birthday)
+    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{passwd,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=CHAR}, #{phoneNum,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{birthday,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="me.dewitt.pojo.User" >
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="passwd != null" >
+        passwd,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="phoneNum != null" >
+        phone_num,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="passwd != null" >
+        #{passwd,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=CHAR},
+      </if>
+      <if test="phoneNum != null" >
+        #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="me.dewitt.pojo.UserExample" resultType="java.lang.Integer" >
+    select count(*) from t_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_user
+    <set >
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userName != null" >
+        user_name = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.passwd != null" >
+        passwd = #{record.passwd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null" >
+        sex = #{record.sex,jdbcType=CHAR},
+      </if>
+      <if test="record.phoneNum != null" >
+        phone_num = #{record.phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.birthday != null" >
+        birthday = #{record.birthday,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_user
+    set user_id = #{record.userId,jdbcType=INTEGER},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      passwd = #{record.passwd,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=CHAR},
+      phone_num = #{record.phoneNum,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      birthday = #{record.birthday,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="me.dewitt.pojo.User" >
+    update t_user
+    <set >
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="passwd != null" >
+        passwd = #{passwd,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=CHAR},
+      </if>
+      <if test="phoneNum != null" >
+        phone_num = #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="me.dewitt.pojo.User" >
+    update t_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      passwd = #{passwd,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=CHAR},
+      phone_num = #{phoneNum,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>

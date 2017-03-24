@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="me.dewitt.dao.ResumeMapper" >
+  <resultMap id="BaseResultMap" type="me.dewitt.pojo.Resume" >
+    <id column="resume_id" property="resumeId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="icon" property="icon" jdbcType="VARCHAR" />
+    <result column="work_age" property="workAge" jdbcType="INTEGER" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="phone_num" property="phoneNum" jdbcType="VARCHAR" />
+    <result column="profession" property="profession" jdbcType="VARCHAR" />
+    <result column="hide" property="hide" jdbcType="BIT" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="industry_name" property="industryName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="me.dewitt.pojo.ResumeWithBLOBs" extends="BaseResultMap" >
+    <result column="work_experience" property="workExperience" jdbcType="LONGVARCHAR" />
+    <result column="project_experience" property="projectExperience" jdbcType="LONGVARCHAR" />
+    <result column="education_experience" property="educationExperience" jdbcType="LONGVARCHAR" />
+    <result column="gradute_info" property="graduteInfo" jdbcType="LONGVARCHAR" />
+    <result column="skills_speciality" property="skillsSpeciality" jdbcType="LONGVARCHAR" />
+    <result column="additional_info" property="additionalInfo" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    resume_id, name, icon, work_age, location, sex, birthday, email, phone_num, profession, 
+    hide, user_id, industry_name
+  </sql>
+  <sql id="Blob_Column_List" >
+    work_experience, project_experience, education_experience, gradute_info, skills_speciality, 
+    additional_info
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="me.dewitt.pojo.ResumeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_resume
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="me.dewitt.pojo.ResumeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_resume
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_resume
+    where resume_id = #{resumeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_resume
+    where resume_id = #{resumeId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="me.dewitt.pojo.ResumeExample" >
+    delete from t_resume
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="me.dewitt.pojo.ResumeWithBLOBs" >
+    insert into t_resume (resume_id, name, icon, 
+      work_age, location, sex, 
+      birthday, email, phone_num, 
+      profession, hide, user_id, 
+      industry_name, work_experience, project_experience, 
+      education_experience, gradute_info, 
+      skills_speciality, additional_info
+      )
+    values (#{resumeId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, 
+      #{workAge,jdbcType=INTEGER}, #{location,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, 
+      #{birthday,jdbcType=TIMESTAMP}, #{email,jdbcType=VARCHAR}, #{phoneNum,jdbcType=VARCHAR}, 
+      #{profession,jdbcType=VARCHAR}, #{hide,jdbcType=BIT}, #{userId,jdbcType=INTEGER}, 
+      #{industryName,jdbcType=VARCHAR}, #{workExperience,jdbcType=LONGVARCHAR}, #{projectExperience,jdbcType=LONGVARCHAR}, 
+      #{educationExperience,jdbcType=LONGVARCHAR}, #{graduteInfo,jdbcType=LONGVARCHAR}, 
+      #{skillsSpeciality,jdbcType=LONGVARCHAR}, #{additionalInfo,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="me.dewitt.pojo.ResumeWithBLOBs" >
+    insert into t_resume
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="resumeId != null" >
+        resume_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="icon != null" >
+        icon,
+      </if>
+      <if test="workAge != null" >
+        work_age,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="phoneNum != null" >
+        phone_num,
+      </if>
+      <if test="profession != null" >
+        profession,
+      </if>
+      <if test="hide != null" >
+        hide,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="industryName != null" >
+        industry_name,
+      </if>
+      <if test="workExperience != null" >
+        work_experience,
+      </if>
+      <if test="projectExperience != null" >
+        project_experience,
+      </if>
+      <if test="educationExperience != null" >
+        education_experience,
+      </if>
+      <if test="graduteInfo != null" >
+        gradute_info,
+      </if>
+      <if test="skillsSpeciality != null" >
+        skills_speciality,
+      </if>
+      <if test="additionalInfo != null" >
+        additional_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="resumeId != null" >
+        #{resumeId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null" >
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="workAge != null" >
+        #{workAge,jdbcType=INTEGER},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null" >
+        #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="profession != null" >
+        #{profession,jdbcType=VARCHAR},
+      </if>
+      <if test="hide != null" >
+        #{hide,jdbcType=BIT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="industryName != null" >
+        #{industryName,jdbcType=VARCHAR},
+      </if>
+      <if test="workExperience != null" >
+        #{workExperience,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="projectExperience != null" >
+        #{projectExperience,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="educationExperience != null" >
+        #{educationExperience,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="graduteInfo != null" >
+        #{graduteInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="skillsSpeciality != null" >
+        #{skillsSpeciality,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="additionalInfo != null" >
+        #{additionalInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="me.dewitt.pojo.ResumeExample" resultType="java.lang.Integer" >
+    select count(*) from t_resume
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_resume
+    <set >
+      <if test="record.resumeId != null" >
+        resume_id = #{record.resumeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.icon != null" >
+        icon = #{record.icon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workAge != null" >
+        work_age = #{record.workAge,jdbcType=INTEGER},
+      </if>
+      <if test="record.location != null" >
+        location = #{record.location,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null" >
+        sex = #{record.sex,jdbcType=CHAR},
+      </if>
+      <if test="record.birthday != null" >
+        birthday = #{record.birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phoneNum != null" >
+        phone_num = #{record.phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.profession != null" >
+        profession = #{record.profession,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hide != null" >
+        hide = #{record.hide,jdbcType=BIT},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.industryName != null" >
+        industry_name = #{record.industryName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workExperience != null" >
+        work_experience = #{record.workExperience,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.projectExperience != null" >
+        project_experience = #{record.projectExperience,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.educationExperience != null" >
+        education_experience = #{record.educationExperience,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.graduteInfo != null" >
+        gradute_info = #{record.graduteInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.skillsSpeciality != null" >
+        skills_speciality = #{record.skillsSpeciality,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.additionalInfo != null" >
+        additional_info = #{record.additionalInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update t_resume
+    set resume_id = #{record.resumeId,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      icon = #{record.icon,jdbcType=VARCHAR},
+      work_age = #{record.workAge,jdbcType=INTEGER},
+      location = #{record.location,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=CHAR},
+      birthday = #{record.birthday,jdbcType=TIMESTAMP},
+      email = #{record.email,jdbcType=VARCHAR},
+      phone_num = #{record.phoneNum,jdbcType=VARCHAR},
+      profession = #{record.profession,jdbcType=VARCHAR},
+      hide = #{record.hide,jdbcType=BIT},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      industry_name = #{record.industryName,jdbcType=VARCHAR},
+      work_experience = #{record.workExperience,jdbcType=LONGVARCHAR},
+      project_experience = #{record.projectExperience,jdbcType=LONGVARCHAR},
+      education_experience = #{record.educationExperience,jdbcType=LONGVARCHAR},
+      gradute_info = #{record.graduteInfo,jdbcType=LONGVARCHAR},
+      skills_speciality = #{record.skillsSpeciality,jdbcType=LONGVARCHAR},
+      additional_info = #{record.additionalInfo,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_resume
+    set resume_id = #{record.resumeId,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      icon = #{record.icon,jdbcType=VARCHAR},
+      work_age = #{record.workAge,jdbcType=INTEGER},
+      location = #{record.location,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=CHAR},
+      birthday = #{record.birthday,jdbcType=TIMESTAMP},
+      email = #{record.email,jdbcType=VARCHAR},
+      phone_num = #{record.phoneNum,jdbcType=VARCHAR},
+      profession = #{record.profession,jdbcType=VARCHAR},
+      hide = #{record.hide,jdbcType=BIT},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      industry_name = #{record.industryName,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="me.dewitt.pojo.ResumeWithBLOBs" >
+    update t_resume
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null" >
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="workAge != null" >
+        work_age = #{workAge,jdbcType=INTEGER},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null" >
+        phone_num = #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="profession != null" >
+        profession = #{profession,jdbcType=VARCHAR},
+      </if>
+      <if test="hide != null" >
+        hide = #{hide,jdbcType=BIT},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="industryName != null" >
+        industry_name = #{industryName,jdbcType=VARCHAR},
+      </if>
+      <if test="workExperience != null" >
+        work_experience = #{workExperience,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="projectExperience != null" >
+        project_experience = #{projectExperience,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="educationExperience != null" >
+        education_experience = #{educationExperience,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="graduteInfo != null" >
+        gradute_info = #{graduteInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="skillsSpeciality != null" >
+        skills_speciality = #{skillsSpeciality,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="additionalInfo != null" >
+        additional_info = #{additionalInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where resume_id = #{resumeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="me.dewitt.pojo.ResumeWithBLOBs" >
+    update t_resume
+    set name = #{name,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      work_age = #{workAge,jdbcType=INTEGER},
+      location = #{location,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=CHAR},
+      birthday = #{birthday,jdbcType=TIMESTAMP},
+      email = #{email,jdbcType=VARCHAR},
+      phone_num = #{phoneNum,jdbcType=VARCHAR},
+      profession = #{profession,jdbcType=VARCHAR},
+      hide = #{hide,jdbcType=BIT},
+      user_id = #{userId,jdbcType=INTEGER},
+      industry_name = #{industryName,jdbcType=VARCHAR},
+      work_experience = #{workExperience,jdbcType=LONGVARCHAR},
+      project_experience = #{projectExperience,jdbcType=LONGVARCHAR},
+      education_experience = #{educationExperience,jdbcType=LONGVARCHAR},
+      gradute_info = #{graduteInfo,jdbcType=LONGVARCHAR},
+      skills_speciality = #{skillsSpeciality,jdbcType=LONGVARCHAR},
+      additional_info = #{additionalInfo,jdbcType=LONGVARCHAR}
+    where resume_id = #{resumeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="me.dewitt.pojo.Resume" >
+    update t_resume
+    set name = #{name,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      work_age = #{workAge,jdbcType=INTEGER},
+      location = #{location,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=CHAR},
+      birthday = #{birthday,jdbcType=TIMESTAMP},
+      email = #{email,jdbcType=VARCHAR},
+      phone_num = #{phoneNum,jdbcType=VARCHAR},
+      profession = #{profession,jdbcType=VARCHAR},
+      hide = #{hide,jdbcType=BIT},
+      user_id = #{userId,jdbcType=INTEGER},
+      industry_name = #{industryName,jdbcType=VARCHAR}
+    where resume_id = #{resumeId,jdbcType=INTEGER}
+  </update>
+</mapper>

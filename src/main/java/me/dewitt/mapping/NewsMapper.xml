@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="me.dewitt.dao.NewsMapper" >
+  <resultMap id="BaseResultMap" type="me.dewitt.pojo.News" >
+    <id column="id_news" property="idNews" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="date" property="date" jdbcType="TIMESTAMP" />
+    <result column="admin_id" property="adminId" jdbcType="INTEGER" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id_news, title, content, date, admin_id, image
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="me.dewitt.pojo.NewsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_news
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_news
+    where id_news = #{idNews,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_news
+    where id_news = #{idNews,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="me.dewitt.pojo.NewsExample" >
+    delete from t_news
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="me.dewitt.pojo.News" >
+    insert into t_news (id_news, title, content, 
+      date, admin_id, image
+      )
+    values (#{idNews,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{date,jdbcType=TIMESTAMP}, #{adminId,jdbcType=INTEGER}, #{image,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="me.dewitt.pojo.News" >
+    insert into t_news
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="idNews != null" >
+        id_news,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="date != null" >
+        date,
+      </if>
+      <if test="adminId != null" >
+        admin_id,
+      </if>
+      <if test="image != null" >
+        image,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="idNews != null" >
+        #{idNews,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adminId != null" >
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="image != null" >
+        #{image,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="me.dewitt.pojo.NewsExample" resultType="java.lang.Integer" >
+    select count(*) from t_news
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_news
+    <set >
+      <if test="record.idNews != null" >
+        id_news = #{record.idNews,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.date != null" >
+        date = #{record.date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.adminId != null" >
+        admin_id = #{record.adminId,jdbcType=INTEGER},
+      </if>
+      <if test="record.image != null" >
+        image = #{record.image,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_news
+    set id_news = #{record.idNews,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
+      content = #{record.content,jdbcType=VARCHAR},
+      date = #{record.date,jdbcType=TIMESTAMP},
+      admin_id = #{record.adminId,jdbcType=INTEGER},
+      image = #{record.image,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="me.dewitt.pojo.News" >
+    update t_news
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        date = #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adminId != null" >
+        admin_id = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id_news = #{idNews,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="me.dewitt.pojo.News" >
+    update t_news
+    set title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      date = #{date,jdbcType=TIMESTAMP},
+      admin_id = #{adminId,jdbcType=INTEGER},
+      image = #{image,jdbcType=VARCHAR}
+    where id_news = #{idNews,jdbcType=INTEGER}
+  </update>
+</mapper>
